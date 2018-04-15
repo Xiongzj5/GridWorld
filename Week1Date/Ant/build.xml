@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+	<!--  >根据依赖关系，我们可以知道每一个target的运行顺序，依次是clean->compile->run->jar;<-->
+	<project name="javacTest" default="jar" basedir=".">
+		<!-->Target clean 用于在编译源文件之前，先清空build目录下的所有中间文件<-->
+		<target name="clean">
+			<delete dir="build"/>  
+		</target>
+		<!--> Target compile用于编译源文件，首先在build目录下新建classes目录，再从src文件夹中找到要编译的文件，并将编译后的类文件放在build下的classes目录中<-->
+		<target name="compile" depends="clean">
+			<mkdir dir="build/classes"/>
+				<javac srcdir="src" destdir="build/classes" includeantruntime="on"/> 
+		</target>
+		<!-->Target Run用于运行java的类文件，要运行的类文件名叫做HelloWorld，类文件的路径是build/classes<-->
+		<target name="run" depends="compile">
+			<java classname="HelloWorld">
+				<classpath>
+					<pathelement path="build/classes"/>
+				</classpath>
+			</java>
+		</target>
+		<!-->Target jar用于生成归档文档<-->
+		<target name="jar" depends="run">
+			<jar destfile="HelloWorld.jar" basedir="build/classes">
+				<manifest>
+					<attribute name="Main-class" value="HelloWorld"/>
+				</manifest>
+			</jar>
+		</target>
+	</project>
